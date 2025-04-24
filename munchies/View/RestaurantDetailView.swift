@@ -3,8 +3,8 @@ import SwiftUI
 struct RestaurantDetailView: View {
     @StateObject private var viewModel: RestaurantDetailViewModel
 
-    init(restaurant: Restaurant) {
-        _viewModel = StateObject(wrappedValue: RestaurantDetailViewModel(restaurant: restaurant))
+    init(restaurant: Restaurant, filters: [Filter]) {
+        _viewModel = StateObject(wrappedValue: RestaurantDetailViewModel(restaurant: restaurant, filters: filters))
     }
 
     var body: some View {
@@ -25,6 +25,22 @@ struct RestaurantDetailView: View {
             Text(viewModel.restaurant.name)
                 .font(.title)
                 .bold()
+
+            if !viewModel.filterNames.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(viewModel.filterNames, id: \.self) { name in
+                            Text(name)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 4)
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(12)
+                                .font(.caption)
+                        }
+                    }
+                    .padding(.bottom, 4)
+                }
+            }
 
             if let isOpen = viewModel.isOpen {
                 Text(isOpen ? "Open" : "Closed")

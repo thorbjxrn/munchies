@@ -28,7 +28,7 @@ struct RestaurantListView: View {
 
                 // Restaurant list
                 List(viewModel.filteredRestaurants) { restaurant in
-                    NavigationLink(destination: RestaurantDetailView(restaurant: restaurant)) {
+                    NavigationLink(destination: RestaurantDetailView(restaurant: restaurant, filters: viewModel.filters)) {
                         RestaurantRowView(restaurant: restaurant)
                     }
                 }
