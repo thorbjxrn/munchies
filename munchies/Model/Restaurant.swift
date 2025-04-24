@@ -1,19 +1,19 @@
 import Foundation
 
-struct Restaurant: Codable, Identifiable {
-    let filterIds: [String]
-    let imageURL: String
+struct Restaurant: Decodable, Identifiable {
     let id: String
-    let deliveryTimeMinutes: Int
     let name: String
+    let imageURL: String
+    let deliveryTimeMinutes: Int
     let rating: Double
+    let filterIds: [String]
 
     private enum CodingKeys: String, CodingKey {
-        case filterIds
-        case imageURL = "image_url"
         case id
-        case deliveryTimeMinutes = "delivery_time_minutes"
         case name
+        case imageURL = "image_url"
+        case deliveryTimeMinutes = "delivery_time_minutes"
         case rating
+        case filterIds
     }
 }
