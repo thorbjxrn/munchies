@@ -1,43 +1,43 @@
 import SwiftUI
 
 struct RestaurantDetailView: View {
-    let restaurant: Restaurant
+    @StateObject private var viewModel: RestaurantDetailViewModel
+
+    init(restaurant: Restaurant) {
+        _viewModel = StateObject(wrappedValue: RestaurantDetailViewModel(restaurant: restaurant))
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            AsyncImage(url: URL(string: restaurant.imageURL)) { phase in
+            AsyncImage(url: URL(string: viewModel.restaurant.imageURL)) { phase in
                 switch phase {
                 case .empty:
-                    ProgressView()
-                        .frame(height: 200)
+                    ProgressView().frame(height: 200)
                 case .success(let image):
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(height: 200)
-                        .clipped()
+                    image.resizable().aspectRatio(contentMode: .fill).frame(height: 200).clipped()
                 case .failure:
-                    Image(systemName: "photo")
-                        .frame(height: 200)
+                    Image(systemName: "photo").frame(height: 200)
                 @unknown default:
                     EmptyView()
                 }
             }
 
-            Text(restaurant.name)
+            Text(viewModel.restaurant.name)
                 .font(.title)
                 .bold()
 
-            Text("Rating: \(String(format: "%.1f", restaurant.rating))")
-                .font(.subheadline)
-
-            Text("Delivery time: \(restaurant.deliveryTimeMinutes) min")
-                .font(.subheadline)
+            if let isOpen = viewModel.isOpen {
+                Text(isOpen ? "Open" : "Closed")
+                    .font(.headline)
+                    .foregroundColor(isOpen ? .green : .red)
+            } else {
+                ProgressView("Checking status...")
+            }
 
             Spacer()
         }
         .padding()
-        .navigationTitle(restaurant.name)
+        .navigationTitle(viewModel.restaurant.name)
         .navigationBarTitleDisplayMode(.inline)
     }
 }
