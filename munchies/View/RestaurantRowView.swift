@@ -8,33 +8,12 @@ struct RestaurantRowView: View {
 
             // Restaurant Image
             AsyncImage(url: URL(string: restaurant.imageURL)) { phase in
-                switch phase {
-                case .empty:
-                    ProgressView()
-                        .frame(height: Spacings.titanic)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(Spacings.cornerRadius)
-                case .success(let image):
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .frame(height: Spacings.titanic)
-                        .frame(maxWidth: .infinity)
-                        .clipped()
-                        .cornerRadius(Spacings.cornerRadius)
-                case .failure:
-                    Image(systemName: "photo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: Spacings.titanic)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(Spacings.cornerRadius)
-                @unknown default:
-                    EmptyView()
-                }
+                asyncImageContent(for: phase)
             }
+            .frame(height: 180)
+            .frame(maxWidth: .infinity)
+            .clipShape(RoundedCorner(radius: 12, corners: [.topLeft, .topRight]))
+            .clipped()
 
             // Details
             VStack(alignment: .leading, spacing: Spacings.small / 2) {
@@ -57,5 +36,39 @@ struct RestaurantRowView: View {
 
         }
         .padding(.bottom, Spacings.medium)
+    }
+
+    @ViewBuilder
+    private func asyncImageContent(for phase: AsyncImagePhase) -> some View {
+        switch phase {
+        case .empty:
+            ProgressView()
+                .background(Color.gray.opacity(0.2))
+        case .success(let image):
+            image
+                .resizable()
+                .scaledToFill()
+        case .failure:
+            Image(systemName: "photo")
+                .resizable()
+                .scaledToFit()
+                .background(Color.gray.opacity(0.2))
+        @unknown default:
+            EmptyView()
+        }
+    }
+}
+
+struct RoundedCorner: Shape {
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        return Path(path.cgPath)
     }
 }
