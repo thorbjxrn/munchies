@@ -7,6 +7,7 @@ enum Spacings {
     static let extraLarge = CGFloat(32)
     static let huge = CGFloat(48)
     static let massive = CGFloat(64)
+    static let titanic = CGFloat(128)
 
-    static let cornerRadius = CGFloat(48)
+    static let cornerRadius = CGFloat(12)
 }

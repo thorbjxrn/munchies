@@ -4,37 +4,58 @@ struct RestaurantRowView: View {
     let restaurant: Restaurant
 
     var body: some View {
-        HStack {
+        VStack(alignment: .leading, spacing: Spacings.small) {
+
+            // Restaurant Image
             AsyncImage(url: URL(string: restaurant.imageURL)) { phase in
                 switch phase {
                 case .empty:
                     ProgressView()
-                        .frame(width: 60, height: 60)
+                        .frame(height: Spacings.titanic)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(Spacings.cornerRadius)
                 case .success(let image):
                     image
                         .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 60, height: 60)
+                        .scaledToFill()
+                        .frame(height: Spacings.titanic)
+                        .frame(maxWidth: .infinity)
                         .clipped()
+                        .cornerRadius(Spacings.cornerRadius)
                 case .failure:
                     Image(systemName: "photo")
-                        .frame(width: 60, height: 60)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: Spacings.titanic)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(Spacings.cornerRadius)
                 @unknown default:
                     EmptyView()
                 }
             }
-            VStack(alignment: .leading) {
-                Text(restaurant.name)
-                    .font(.headline)
-                Text("Delivery: \(restaurant.deliveryTimeMinutes) min")
-                    .font(.subheadline)
+
+            // Details
+            VStack(alignment: .leading, spacing: Spacings.small / 2) {
+                HStack(spacing: Spacings.small) {
+                    Text(restaurant.name)
+                        .font(.headline)
+                    Spacer()
+                    Text("★")
+                        .foregroundColor(.yellow)
+                    Text(String(format: "%.1f", restaurant.rating))
+                        .foregroundColor(.secondary)
+                }
+
+                HStack(spacing: Spacings.small) {
+                    Image(systemName: "clock").foregroundColor(.red)
+                    Text("\(restaurant.deliveryTimeMinutes)")
+                }
             }
-            Spacer()
-            Text(String(format: "%.1f", restaurant.rating))
-                .font(.title3)
-                .foregroundColor(.blue)
+            .padding(.horizontal, Spacings.small)
+
         }
-        .contentShape(Rectangle())
-        .padding(4)
+        .padding(.bottom, Spacings.medium)
     }
 }

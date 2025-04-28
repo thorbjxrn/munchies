@@ -53,7 +53,7 @@ struct RestaurantListView: View {
                                 }
                                 .background(viewModel.isFilterSelected(filter.id) ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))
                                 .foregroundColor(viewModel.isFilterSelected(filter.id) ? .blue : .primary)
-                                .cornerRadius(Spacings.cornerRadius)
+                                .cornerRadius(Spacings.huge)
                                 .onTapGesture {
                                     viewModel.toggleFilter(filter.id)
                                 }
