@@ -63,8 +63,6 @@ struct RestaurantDetailView: View {
                     ProgressView("Checking status...")
                         .font(.subheadline)
                 }
-
-                Spacer()
             }
             .padding(Spacings.large)
             .frame(maxWidth: .infinity)
