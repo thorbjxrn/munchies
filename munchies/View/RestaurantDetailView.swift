@@ -38,7 +38,6 @@ struct RestaurantDetailView: View {
                                 .font(.caption)
                         }
                     }
-//                    .padding(.bottom, )
                 }
             }
 

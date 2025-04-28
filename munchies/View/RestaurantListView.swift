@@ -65,7 +65,10 @@ struct RestaurantListView: View {
 
                 List(viewModel.filteredRestaurants) { restaurant in
                     ZStack {
-                        RestaurantRowView(restaurant: restaurant)
+                        RestaurantRowView(
+                            restaurant: restaurant,
+                            filters: viewModel.filters.filter { restaurant.filterIds.contains($0.id) }
+                        )
                         NavigationLink(destination: RestaurantDetailView(restaurant: restaurant, filters: viewModel.filters)) {
                             EmptyView()
                         }

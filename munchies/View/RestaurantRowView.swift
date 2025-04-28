@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RestaurantRowView: View {
     let restaurant: Restaurant
+    let filters: [Filter]
 
     var body: some View {
         VStack() {
@@ -20,8 +21,22 @@ struct RestaurantRowView: View {
                     Spacer()
                     Text("★")
                         .foregroundColor(.yellow)
+                        .font(.footnote)
                     Text(String(format: "%.1f", restaurant.rating))
                         .foregroundColor(.secondary)
+                        .font(.footnote)
+                }
+
+                if !filters.isEmpty {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: Spacings.small) {
+                            ForEach(filters) { filter in
+                                Text(filter.name)
+                                    .font(.footnote)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
                 HStack(spacing: Spacings.small) {
