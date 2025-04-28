@@ -19,7 +19,7 @@ struct RestaurantRowView: View {
             VStack(alignment: .leading, spacing: Spacings.small / 2) {
                 HStack(spacing: Spacings.small) {
                     Text(restaurant.name)
-                        .font(.headline)
+                        .font(.title3)
                     Spacer()
                     Text("★")
                         .foregroundColor(.yellow)
@@ -29,7 +29,7 @@ struct RestaurantRowView: View {
 
                 HStack(spacing: Spacings.small) {
                     Image(systemName: "clock").foregroundColor(.red)
-                    Text("\(restaurant.deliveryTimeMinutes)")
+                    Text("\(restaurant.deliveryTimeMinutes) min")
                 }
             }
             .padding(.horizontal, Spacings.small)

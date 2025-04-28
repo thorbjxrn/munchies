@@ -74,9 +74,14 @@ struct RestaurantListView: View {
                 }
 
                 List(viewModel.filteredRestaurants) { restaurant in
-                    NavigationLink(destination: RestaurantDetailView(restaurant: restaurant, filters: viewModel.filters)) {
+                    ZStack {
                         RestaurantRowView(restaurant: restaurant)
+                        NavigationLink(destination: RestaurantDetailView(restaurant: restaurant, filters: viewModel.filters)) {
+                            EmptyView()
+                        }
+                        .opacity(0)
                     }
+                    .listRowSeparator(.hidden)
                 }
                 .listStyle(.plain)
                 .refreshable {
