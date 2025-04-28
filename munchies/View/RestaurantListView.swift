@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct RestaurantListView: View {
-    @Environment(\.colorScheme) private var colorScheme
     @StateObject private var viewModel = RestaurantListViewModel()
     @State private var scrollOffset: CGFloat = 0
 
@@ -10,9 +9,10 @@ struct RestaurantListView: View {
             VStack() {
                 HStack(alignment: .firstTextBaseline) {
                     Image("umain-logo")
+                        .renderingMode(.template)
                         .resizable()
                         .scaledToFit()
-                        .foregroundColor(colorScheme == .dark ? .white : .black)
+                        .foregroundColor(Color.primary)
                         .frame(width: Spacings.massive, height: Spacings.massive)
                         .padding(Spacings.medium)
                     Spacer()
