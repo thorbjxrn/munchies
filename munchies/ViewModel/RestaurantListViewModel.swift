@@ -54,7 +54,7 @@ class RestaurantListViewModel: ObservableObject {
             }
         }
 
-        self.filters = fetched.sorted { $0.name < $1.name }
+        self.filters = fetched.sorted { $0.name > $1.name }
     }
 
     func toggleFilter(_ id: String) {
