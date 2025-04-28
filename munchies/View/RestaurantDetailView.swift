@@ -47,17 +47,16 @@ struct RestaurantDetailView: View {
             VStack(alignment: .leading, spacing: Spacings.medium) {
                 Text(viewModel.restaurant.name)
                     .font(.title)
-                    .bold()
 
                 if !viewModel.filterNames.isEmpty {
                     Text(viewModel.filterNames.joined(separator: " • "))
-                        .font(.subheadline)
+                        .font(.title2)
                         .foregroundColor(.secondary)
                 }
 
                 if let isOpen = viewModel.isOpen {
                     Text(isOpen ? "Open" : "Closed")
-                        .font(.subheadline)
+                        .font(.title2)
                         .foregroundColor(isOpen ? .green : .red)
                 } else {
                     ProgressView("Checking status...")
@@ -68,7 +67,7 @@ struct RestaurantDetailView: View {
             .frame(maxWidth: .infinity)
             .background(Color(UIColor.systemBackground))
             .cornerRadius(Spacings.cornerRadius)
-            .padding(.horizontal, Spacings.huge)
+            .padding(.horizontal, Spacings.extraLarge)
             .offset(y: Spacings.immensity - Spacings.massive)
             .shadow(color: Color.black.opacity(0.25), radius: 4, x: 0, y: 2)
         }
