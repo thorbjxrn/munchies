@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RestaurantListView: View {
     @StateObject private var viewModel = RestaurantListViewModel()
+    @State private var scrollOffset: CGFloat = 0
 
     var body: some View {
         NavigationView {
@@ -16,17 +17,18 @@ struct RestaurantListView: View {
                                             switch phase {
                                             case .empty:
                                                 ProgressView()
-                                                    .frame(width: Spacings.extraLarge, height: Spacings.small)
+                                                    .frame(width: Spacings.huge, height: Spacings.huge)
                                             case .success(let image):
                                                 image
                                                     .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: Spacings.extraLarge, height: Spacings.extraLarge)
+                                                    .scaledToFill()
+                                                    .frame(width: Spacings.huge, height: Spacings.huge)
+                                                    .clipped()
                                             case .failure:
                                                 Image(systemName: "photo")
                                                     .resizable()
                                                     .scaledToFit()
-                                                    .frame(width: Spacings.extraLarge, height: Spacings.extraLarge)
+                                                    .frame(width: Spacings.huge, height: Spacings.huge)
                                                     .foregroundColor(.gray)
                                             @unknown default:
                                                 EmptyView()
@@ -35,10 +37,9 @@ struct RestaurantListView: View {
                                     }
 
                                     Text(filter.name)
-                                        .font(.caption)
+                                        .font(.headline)
+                                        .padding(.trailing, Spacings.medium)
                                 }
-                                .padding(.horizontal, Spacings.medium)
-                                .padding(.vertical, Spacings.small)
                                 .background(viewModel.isFilterSelected(filter.id) ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))
                                 .foregroundColor(viewModel.isFilterSelected(filter.id) ? .blue : .primary)
                                 .cornerRadius(Spacings.cornerRadius)
@@ -75,7 +76,17 @@ struct RestaurantListView: View {
                     }
                 }
             }
-            .navigationTitle("U *")
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Image("umain-logo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: max(Spacings.extraLarge, Spacings.huge - scrollOffset / 5))
+                        .animation(.easeInOut(duration: 0.2), value: scrollOffset)
+                        .padding(Spacings.extraLarge)
+                        .colorInvert()
+                }
+            }
             .onAppear {
                 Task {
                     await viewModel.fetchRestaurants()
