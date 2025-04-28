@@ -8,15 +8,15 @@ struct RestaurantDetailView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: nil) {
             AsyncImage(url: URL(string: viewModel.restaurant.imageURL)) { phase in
                 switch phase {
                 case .empty:
-                    ProgressView().frame(height: 200)
+                    ProgressView().frame(height: Spacings.immensity)
                 case .success(let image):
-                    image.resizable().aspectRatio(contentMode: .fill).frame(height: 200).clipped()
+                    image.resizable().aspectRatio(contentMode: .fill).frame(height: Spacings.immensity).clipped()
                 case .failure:
-                    Image(systemName: "photo").frame(height: 200)
+                    Image(systemName: "photo").frame(height: Spacings.immensity)
                 @unknown default:
                     EmptyView()
                 }
@@ -34,11 +34,11 @@ struct RestaurantDetailView: View {
                                 .padding(.horizontal, 10)
                                 .padding(.vertical, 4)
                                 .background(Color.gray.opacity(0.2))
-                                .cornerRadius(12)
+                                .cornerRadius(Spacings.cornerRadius)
                                 .font(.caption)
                         }
                     }
-                    .padding(.bottom, 4)
+//                    .padding(.bottom, )
                 }
             }
 

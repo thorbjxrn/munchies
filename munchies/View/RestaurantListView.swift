@@ -63,16 +63,6 @@ struct RestaurantListView: View {
                     }
                 }
 
-                // stretchy spinner
-                if viewModel.isLoading {
-                    VStack {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle())
-                    }
-                    .opacity(viewModel.isLoading ? 1 : 0)
-                    .animation(.easeInOut(duration: 0.2), value: viewModel.isLoading)
-                }
-
                 List(viewModel.filteredRestaurants) { restaurant in
                     ZStack {
                         RestaurantRowView(restaurant: restaurant)

@@ -4,19 +4,16 @@ struct RestaurantRowView: View {
     let restaurant: Restaurant
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Spacings.small) {
-
+        VStack() {
             // Restaurant Image
             AsyncImage(url: URL(string: restaurant.imageURL)) { phase in
                 asyncImageContent(for: phase)
             }
-            .frame(height: 180)
-            .frame(maxWidth: .infinity)
-            .clipShape(RoundedCorner(radius: 12, corners: [.topLeft, .topRight]))
-            .clipped()
+            .scaledToFill()
+            .clipShape(RoundedCorner(radius: Spacings.cornerRadius, corners: [.topLeft, .topRight]))
 
             // Details
-            VStack(alignment: .leading, spacing: Spacings.small / 2) {
+            VStack(alignment: .leading, spacing: Spacings.small) {
                 HStack(spacing: Spacings.small) {
                     Text(restaurant.name)
                         .font(.title3)
@@ -33,9 +30,12 @@ struct RestaurantRowView: View {
                 }
             }
             .padding(.horizontal, Spacings.small)
-
+            .padding(.bottom, Spacings.small)
         }
-        .padding(.bottom, Spacings.medium)
+        .background(Color(UIColor.systemBackground))
+        .clipShape(RoundedCorner(radius: Spacings.cornerRadius, corners: [.topLeft, .topRight]))
+        .shadow(color: Color.black.opacity(0.25), radius: 4, x: 0, y: 2)
+        .padding(Spacings.small)
     }
 
     @ViewBuilder
