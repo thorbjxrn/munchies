@@ -76,6 +76,7 @@ struct RestaurantListView: View {
                     .buttonStyle(.plain)
                     .listRowSeparator(.hidden)
                 }
+//                .sheet(item: $selectedRestaurant) { restaurant in
                 .fullScreenCover(item: $selectedRestaurant) { restaurant in
                     NavigationView {
                         RestaurantDetailView(restaurant: restaurant, filters: viewModel.filters)

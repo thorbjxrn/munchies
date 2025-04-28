@@ -3,6 +3,8 @@ import SwiftUI
 struct RestaurantDetailView: View {
     @StateObject private var viewModel: RestaurantDetailViewModel
     @Environment(\.dismiss) private var dismiss
+    @State private var animateEntry = false
+    @State private var rotationAngle: Double = 360
 
     init(restaurant: Restaurant, filters: [Filter]) {
         _viewModel = StateObject(wrappedValue: RestaurantDetailViewModel(restaurant: restaurant, filters: filters))
@@ -16,25 +18,28 @@ struct RestaurantDetailView: View {
                     switch phase {
                     case .empty:
                         ProgressView()
-                            .frame(height: 300)
+                            .frame(height: Spacings.immensity)
                             .frame(maxWidth: .infinity)
                             .background(Color.gray.opacity(0.1))
                     case .success(let image):
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(height: 300)
+                            .scaledToFill()
+                            .frame(height: Spacings.immensity)
                             .frame(maxWidth: .infinity)
                             .clipped()
                     case .failure:
                         Image(systemName: "photo")
-                            .frame(height: 300)
+                            .frame(height: Spacings.immensity)
                             .frame(maxWidth: .infinity)
                             .background(Color.gray.opacity(0.1))
                     @unknown default:
                         EmptyView()
                     }
                 }
+                .rotationEffect(.degrees(rotationAngle))
+                .animation(.interpolatingSpring(stiffness: 135, damping: 25), value: animateEntry)
                 Spacer()
             }
 
@@ -65,6 +70,12 @@ struct RestaurantDetailView: View {
             .cornerRadius(Spacings.cornerRadius)
             .offset(y: Spacings.immensity)
         }
+        .scaleEffect(animateEntry ? 1.0 : 0.80)
+        .animation(.interpolatingSpring(stiffness: 85, damping: 100), value: rotationAngle)
+        .onAppear {
+            animateEntry = true
+            rotationAngle = 0
+        }
         .ignoresSafeArea(edges: .top)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -72,7 +83,7 @@ struct RestaurantDetailView: View {
                     dismiss()
                 }) {
                     Image(systemName: "chevron.down")
-                        .font(.system(size: 20, weight: .bold))
+                        .font(.system(size: Spacings.large, weight: .bold))
                         .foregroundColor(.primary)
                 }
             }

@@ -30,11 +30,18 @@ struct RestaurantRowView: View {
                 if !filters.isEmpty {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: Spacings.small) {
-                            ForEach(filters) { filter in
+                            ForEach(Array(filters.enumerated()), id: \.element.id) { index, filter in
                                 Text(filter.name)
                                     .font(.footnote)
+
+                                if index != filters.count - 1 {
+                                    Text("•")
+                                        .font(.footnote)
+                                        .padding(.horizontal, 2)
+                                }
                             }
                         }
+                        .padding(.horizontal, Spacings.small)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
