@@ -1,12 +1,23 @@
 import SwiftUI
 
 struct RestaurantListView: View {
+    @Environment(\.colorScheme) private var colorScheme
     @StateObject private var viewModel = RestaurantListViewModel()
     @State private var scrollOffset: CGFloat = 0
 
     var body: some View {
         NavigationView {
             VStack() {
+                HStack(alignment: .firstTextBaseline) {
+                    Image("umain-logo")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(colorScheme == .dark ? .white : .black)
+                        .frame(width: Spacings.massive, height: Spacings.massive)
+                        .padding(Spacings.medium)
+                    Spacer()
+                }
+                // filters
                 if !viewModel.filters.isEmpty {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: Spacings.small) {
@@ -51,16 +62,15 @@ struct RestaurantListView: View {
                         .padding(.horizontal)
                     }
                 }
+
+                // stretchy spinner
                 if viewModel.isLoading {
                     VStack {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle())
-                            .padding(.top, Spacings.small)
-                        Spacer()
                     }
                     .opacity(viewModel.isLoading ? 1 : 0)
                     .animation(.easeInOut(duration: 0.2), value: viewModel.isLoading)
-                    .frame(height: Spacings.extraLarge)
                 }
 
                 List(viewModel.filteredRestaurants) { restaurant in
@@ -74,17 +84,6 @@ struct RestaurantListView: View {
                         await viewModel.fetchRestaurants()
                         triggerHaptic()
                     }
-                }
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Image("umain-logo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: max(Spacings.extraLarge, Spacings.huge - scrollOffset / 5))
-                        .animation(.easeInOut(duration: 0.2), value: scrollOffset)
-                        .padding(Spacings.extraLarge)
-                        .colorInvert()
                 }
             }
             .onAppear {
