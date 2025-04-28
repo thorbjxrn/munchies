@@ -4,7 +4,7 @@ struct RestaurantDetailView: View {
     @StateObject private var viewModel: RestaurantDetailViewModel
     @Environment(\.dismiss) private var dismiss
     @State private var animateEntry = false
-    @State private var rotationAngle: Double = 360
+    @State private var rotationAngle: Double = 250
 
     init(restaurant: Restaurant, filters: [Filter]) {
         _viewModel = StateObject(wrappedValue: RestaurantDetailViewModel(restaurant: restaurant, filters: filters))
@@ -43,6 +43,7 @@ struct RestaurantDetailView: View {
                 Spacer()
             }
 
+            // Card view
             VStack(alignment: .leading, spacing: Spacings.medium) {
                 Text(viewModel.restaurant.name)
                     .font(.title)
@@ -65,11 +66,15 @@ struct RestaurantDetailView: View {
 
                 Spacer()
             }
-            .padding()
+            .padding(Spacings.large)
+            .frame(maxWidth: .infinity)
             .background(Color(UIColor.systemBackground))
             .cornerRadius(Spacings.cornerRadius)
-            .offset(y: Spacings.immensity)
+            .padding(.horizontal, Spacings.huge)
+            .offset(y: Spacings.immensity - Spacings.massive)
+            .shadow(color: Color.black.opacity(0.25), radius: 4, x: 0, y: 2)
         }
+        .shadow(color: Color.black.opacity(0.25), radius: 4, x: 0, y: 2)
         .scaleEffect(animateEntry ? 1.0 : 0.80)
         .animation(.interpolatingSpring(stiffness: 85, damping: 100), value: rotationAngle)
         .onAppear {

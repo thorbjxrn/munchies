@@ -50,6 +50,7 @@ struct RestaurantListView: View {
 
                                     Text(filter.name)
                                         .font(.headline)
+                                        .bold()
                                         .padding(.trailing, Spacings.medium)
                                 }
                                 .background(viewModel.isFilterSelected(filter.id) ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))

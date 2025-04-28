@@ -23,25 +23,29 @@ struct RestaurantRowView: View {
                         .foregroundColor(.yellow)
                         .font(.footnote)
                     Text(String(format: "%.1f", restaurant.rating))
-                        .foregroundColor(.secondary)
-                        .font(.footnote)
+                        .foregroundColor(.black)
+                        .opacity(0.5)
+                        .font(.callout)
+                        .bold()
                 }
 
                 if !filters.isEmpty {
                     ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: Spacings.small) {
+                        HStack(spacing: 0) {
                             ForEach(Array(filters.enumerated()), id: \.element.id) { index, filter in
                                 Text(filter.name)
-                                    .font(.footnote)
+                                    .font(.body)
+                                    .foregroundColor(.secondary)
+                                    .bold()
 
                                 if index != filters.count - 1 {
                                     Text("•")
-                                        .font(.footnote)
-                                        .padding(.horizontal, 2)
+                                        .font(.body)
+                                        .foregroundColor(.secondary)
+                                        .padding(.horizontal, Spacings.small)
                                 }
                             }
                         }
-                        .padding(.horizontal, Spacings.small)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
