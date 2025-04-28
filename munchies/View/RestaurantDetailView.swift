@@ -69,9 +69,7 @@ struct RestaurantDetailView: View {
             .cornerRadius(Spacings.cornerRadius)
             .padding(.horizontal, Spacings.extraLarge)
             .offset(y: Spacings.immensity - Spacings.massive)
-            .shadow(color: Color.black.opacity(0.25), radius: 4, x: 0, y: 2)
         }
-        .shadow(color: Color.black.opacity(0.25), radius: 4, x: 0, y: 2)
         .scaleEffect(animateEntry ? 1.0 : 0.80)
         .animation(.interpolatingSpring(stiffness: 85, damping: 100), value: rotationAngle)
         .onAppear {

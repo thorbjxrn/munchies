@@ -60,7 +60,7 @@ struct RestaurantRowView: View {
         }
         .background(Color(UIColor.systemBackground))
         .clipShape(RoundedCorner(radius: Spacings.cornerRadius, corners: [.topLeft, .topRight]))
-        .shadow(color: Color.black.opacity(0.25), radius: 4, x: 0, y: 2)
+        .shadow(color: Color.primary.opacity(0.25), radius: 4, x: 0, y: 2)
         .padding(Spacings.small)
     }
 
