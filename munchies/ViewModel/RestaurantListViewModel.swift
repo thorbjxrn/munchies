@@ -6,6 +6,7 @@ class RestaurantListViewModel: ObservableObject {
     @Published var restaurants: [Restaurant] = []
     @Published var filters: [Filter] = []
     @Published var selectedFilterIDs: Set<String> = []
+    @Published var isLoading: Bool = false
 
     var filteredRestaurants: [Restaurant] {
         guard !selectedFilterIDs.isEmpty else { return restaurants }
@@ -16,6 +17,9 @@ class RestaurantListViewModel: ObservableObject {
 
     func fetchRestaurants() async {
         guard let url = URL(string: "https://food-delivery.umain.io/api/v1/restaurants") else { return }
+
+        isLoading = true
+        defer { isLoading = false }
 
         do {
             let response: RestaurantsResponse = try await NetworkService.shared.fetchData(from: url)
