@@ -5,20 +5,46 @@ struct RestaurantListView: View {
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
+            VStack() {
                 if !viewModel.filters.isEmpty {
                     ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 8) {
+                        HStack(spacing: Spacings.small) {
                             ForEach(viewModel.filters) { filter in
-                                Text(filter.name)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(viewModel.isFilterSelected(filter.id) ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))
-                                    .foregroundColor(viewModel.isFilterSelected(filter.id) ? .blue : .primary)
-                                    .cornerRadius(16)
-                                    .onTapGesture {
-                                        viewModel.toggleFilter(filter.id)
+                                HStack(spacing: Spacings.small) {
+                                    if let urlString = filter.imageURL, let url = URL(string: urlString) {
+                                        AsyncImage(url: url) { phase in
+                                            switch phase {
+                                            case .empty:
+                                                ProgressView()
+                                                    .frame(width: Spacings.extraLarge, height: Spacings.small)
+                                            case .success(let image):
+                                                image
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: Spacings.extraLarge, height: Spacings.extraLarge)
+                                            case .failure:
+                                                Image(systemName: "photo")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: Spacings.extraLarge, height: Spacings.extraLarge)
+                                                    .foregroundColor(.gray)
+                                            @unknown default:
+                                                EmptyView()
+                                            }
+                                        }
                                     }
+
+                                    Text(filter.name)
+                                        .font(.caption)
+                                }
+                                .padding(.horizontal, Spacings.medium)
+                                .padding(.vertical, Spacings.small)
+                                .background(viewModel.isFilterSelected(filter.id) ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))
+                                .foregroundColor(viewModel.isFilterSelected(filter.id) ? .blue : .primary)
+                                .cornerRadius(Spacings.cornerRadius)
+                                .onTapGesture {
+                                    viewModel.toggleFilter(filter.id)
+                                }
                             }
                         }
                         .padding(.horizontal)
@@ -28,12 +54,12 @@ struct RestaurantListView: View {
                     VStack {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle())
-                            .padding(.top, 8)
+                            .padding(.top, Spacings.small)
                         Spacer()
                     }
                     .opacity(viewModel.isLoading ? 1 : 0)
                     .animation(.easeInOut(duration: 0.2), value: viewModel.isLoading)
-                    .frame(height: 40)
+                    .frame(height: Spacings.extraLarge)
                 }
 
                 List(viewModel.filteredRestaurants) { restaurant in
