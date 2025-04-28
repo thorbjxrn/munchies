@@ -3,6 +3,7 @@ import SwiftUI
 struct RestaurantListView: View {
     @StateObject private var viewModel = RestaurantListViewModel()
     @State private var scrollOffset: CGFloat = 0
+    @State private var selectedRestaurant: Restaurant? = nil
 
     var body: some View {
         NavigationView {
@@ -64,17 +65,23 @@ struct RestaurantListView: View {
                 }
 
                 List(viewModel.filteredRestaurants) { restaurant in
-                    ZStack {
+                    Button {
+                        selectedRestaurant = restaurant
+                    } label: {
                         RestaurantRowView(
                             restaurant: restaurant,
                             filters: viewModel.filters.filter { restaurant.filterIds.contains($0.id) }
                         )
-                        NavigationLink(destination: RestaurantDetailView(restaurant: restaurant, filters: viewModel.filters)) {
-                            EmptyView()
-                        }
-                        .opacity(0)
                     }
+                    .buttonStyle(.plain)
                     .listRowSeparator(.hidden)
+                }
+                .fullScreenCover(item: $selectedRestaurant) { restaurant in
+                    NavigationView {
+                        RestaurantDetailView(restaurant: restaurant, filters: viewModel.filters)
+                    }
+                    .ignoresSafeArea(edges: .top)
+                    .statusBar(hidden: true)
                 }
                 .listStyle(.plain)
                 .refreshable {

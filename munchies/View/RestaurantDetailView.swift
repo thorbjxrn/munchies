@@ -2,57 +2,81 @@ import SwiftUI
 
 struct RestaurantDetailView: View {
     @StateObject private var viewModel: RestaurantDetailViewModel
+    @Environment(\.dismiss) private var dismiss
 
     init(restaurant: Restaurant, filters: [Filter]) {
         _viewModel = StateObject(wrappedValue: RestaurantDetailViewModel(restaurant: restaurant, filters: filters))
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: nil) {
-            AsyncImage(url: URL(string: viewModel.restaurant.imageURL)) { phase in
-                switch phase {
-                case .empty:
-                    ProgressView().frame(height: Spacings.immensity)
-                case .success(let image):
-                    image.resizable().aspectRatio(contentMode: .fill).frame(height: Spacings.immensity).clipped()
-                case .failure:
-                    Image(systemName: "photo").frame(height: Spacings.immensity)
-                @unknown default:
-                    EmptyView()
-                }
-            }
-
-            Text(viewModel.restaurant.name)
-                .font(.title)
-                .bold()
-
-            if !viewModel.filterNames.isEmpty {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(viewModel.filterNames, id: \.self) { name in
-                            Text(name)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 4)
-                                .background(Color.gray.opacity(0.2))
-                                .cornerRadius(Spacings.cornerRadius)
-                                .font(.caption)
-                        }
+        ZStack(alignment: .top) {
+            VStack(spacing: 0) {
+                // Top big Image
+                AsyncImage(url: URL(string: viewModel.restaurant.imageURL)) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                            .frame(height: 300)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.gray.opacity(0.1))
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(height: 300)
+                            .frame(maxWidth: .infinity)
+                            .clipped()
+                    case .failure:
+                        Image(systemName: "photo")
+                            .frame(height: 300)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.gray.opacity(0.1))
+                    @unknown default:
+                        EmptyView()
                     }
                 }
+                Spacer()
             }
 
-            if let isOpen = viewModel.isOpen {
-                Text(isOpen ? "Open" : "Closed")
-                    .font(.headline)
-                    .foregroundColor(isOpen ? .green : .red)
-            } else {
-                ProgressView("Checking status...")
-            }
+            VStack(alignment: .leading, spacing: Spacings.medium) {
+                Text(viewModel.restaurant.name)
+                    .font(.title)
+                    .bold()
 
-            Spacer()
+                if !viewModel.filterNames.isEmpty {
+                    Text(viewModel.filterNames.joined(separator: " • "))
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+
+                if let isOpen = viewModel.isOpen {
+                    Text(isOpen ? "Open" : "Closed")
+                        .font(.subheadline)
+                        .foregroundColor(isOpen ? .green : .red)
+                } else {
+                    ProgressView("Checking status...")
+                        .font(.subheadline)
+                }
+
+                Spacer()
+            }
+            .padding()
+            .background(Color(UIColor.systemBackground))
+            .cornerRadius(Spacings.cornerRadius)
+            .offset(y: Spacings.immensity)
         }
-        .padding()
-        .navigationTitle(viewModel.restaurant.name)
+        .ignoresSafeArea(edges: .top)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(.primary)
+                }
+            }
+        }
         .navigationBarTitleDisplayMode(.inline)
     }
 }
