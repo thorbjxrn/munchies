@@ -23,7 +23,7 @@ struct RestaurantRowView: View {
                         .foregroundColor(.yellow)
                         .font(.footnote)
                     Text(String(format: "%.1f", restaurant.rating))
-                        .foregroundColor(.black)
+                        .foregroundColor(.primary)
                         .opacity(0.5)
                         .font(.callout)
                         .bold()
